@@ -1,29 +1,24 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 10.0f;
-    float _yAngle = 0.0f; 
-
+    float _speed = 10.0f;
      void Start()
     {
-        
+        Managers.Input.KeyAction -= OnKeyboard;
+        Managers.Input.KeyAction += OnKeyboard; 
     }
 
     void Update()
     {
-        _yAngle += Time.deltaTime * 100;
-        // Àý´ë È¸Àü°ª
-        // transform.eulerAngles = new Vector3(0.0f, _yAngle, 0.0f);
+        
+    }
 
-        // +-delta
-        // transform.Rotate(new Vector3(0.0f, Time.deltaTime*100.0f, 0.0f));
-
-        //transform.rotation = Quaternion.Euler(new Vector3(0.0f, _yAngle, 0.0f));
-
+    void OnKeyboard()
+    {
         if (Input.GetKey(KeyCode.W))
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.forward), 0.2f);
