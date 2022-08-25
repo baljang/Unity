@@ -11,6 +11,10 @@ public class Managers : MonoBehaviour
     {
         Init(); 
     }
+    void Update()
+    {
+
+    }
 
     static void Init()
     {
@@ -25,10 +29,5 @@ public class Managers : MonoBehaviour
             DontDestroyOnLoad(go); 
             s_instance= go.GetComponent<Managers>();
         }
-    }
-
-    void Update()
-    {
-        
     }
 }
