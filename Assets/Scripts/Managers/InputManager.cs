@@ -5,14 +5,17 @@ using UnityEngine;
 
 public class InputManager 
 {
-    public Action KeyAction = null;
-
+    public Action KeyAction = null; 
+     void Start()
+    {
+        
+    }
     public void OnUpdate()
     {
         if (Input.anyKey == false)
             return;
-        
+
         if (KeyAction != null)
-            KeyAction.Invoke();         
+            KeyAction.Invoke(); 
     }
 }

@@ -1,22 +1,22 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    float _speed = 10.0f;
+    float _speed = 10.0f; 
      void Start()
     {
-        Managers.Input.KeyAction -= OnKeyboard;
+        Managers.Input.KeyAction -= OnKeyboard; 
         Managers.Input.KeyAction += OnKeyboard; 
     }
 
     void Update()
     {
-        
-    }
 
+    }
+    
     void OnKeyboard()
     {
         if (Input.GetKey(KeyCode.W))
@@ -41,3 +41,5 @@ public class PlayerController : MonoBehaviour
         }
     }
 }
+
+  
