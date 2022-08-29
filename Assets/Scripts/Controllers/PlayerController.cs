@@ -30,11 +30,8 @@ public class PlayerController : MonoBehaviour
             else
             {
                 float moveDist = Mathf.Clamp(_speed * Time.deltaTime, 0, dir.magnitude);
-                //if(moveDist >= dir.magnitude)
-                //    moveDist = dir.magnitude;
-                
-                transform.position += dir.normalized * moveDist; 
-                transform.LookAt(_destPos);
+                transform.position += dir.normalized * moveDist;
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 20 * Time.deltaTime); 
             }
         }
     }
