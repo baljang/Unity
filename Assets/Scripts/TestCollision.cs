@@ -40,7 +40,7 @@ public class TestCollision : MonoBehaviour
 
             Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.red, 1.0f);
 
-            LayerMask mask = LayerMask.GetMask("Monster") | LayerMask.GetMask("Wall"); 
+            LayerMask mask = LayerMask.GetMask("Monster") | LayerMask.GetMask("Wall");
             // int mask = (1 << 8) | (1 << 9);
 
             RaycastHit hit;
