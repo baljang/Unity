@@ -3,21 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputManager 
+public class InputManager
 {
     public Action KeyAction = null;
     public Action<Define.MouseEvent> MouseAction = null; 
 
     bool _pressed = false; 
-     void Start()
+       
+    void Start()
     {
-        
+
     }
     public void OnUpdate()
     {
         if (Input.anyKey && KeyAction != null)
-            KeyAction.Invoke(); 
+            KeyAction.Invoke();
 
+        // 누르고 있는지 클릭인지, 클릭이면 부르기
         if(MouseAction != null)
         {
             if(Input.GetMouseButton(0))
@@ -29,8 +31,9 @@ public class InputManager
             {
                 if (_pressed)
                     MouseAction.Invoke(Define.MouseEvent.Click);
-                _pressed = false;
+                _pressed = false; 
             }
         }
+
     }
 }

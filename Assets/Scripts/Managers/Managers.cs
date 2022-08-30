@@ -21,8 +21,8 @@ public class Managers : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _input.OnUpdate(); 
-    }   
+        _input.OnUpdate();
+    }
 
     static void Init()
     {

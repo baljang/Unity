@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Define 
+public class Define
 {
+ // 마우스 이벤트 종류
     public enum MouseEvent
     {
-        Press, 
-        Click,
+       Press, 
+       Click,
     }
 
-    public enum CameraMode
+     public enum CameraMode
     {
         QuarterView,
     }
