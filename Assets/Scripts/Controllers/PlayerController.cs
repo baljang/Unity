@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
         Managers.Input.MouseAction += OnMouseClicked;     
     }
 
-    float wait_run_ratio = 0;
     public enum PlayerState
     {
         Die,
@@ -51,18 +50,12 @@ public class PlayerController : MonoBehaviour
         }
 
         // 애니메이션
-        wait_run_ratio = Mathf.Lerp(wait_run_ratio, 1, 10.0f * Time.deltaTime);
         Animator anim = GetComponent<Animator>();
-        anim.SetFloat("wait_run_ratio", wait_run_ratio);
-        anim.Play("WAIT_RUN");
     }
 
     void UpdateIdle()
     {
-        wait_run_ratio = Mathf.Lerp(wait_run_ratio, 0, 10.0f * Time.deltaTime);
         Animator anim = GetComponent<Animator>();
-        anim.SetFloat("wait_run_ratio", wait_run_ratio);
-        anim.Play("WAIT_RUN");
     }
 
     void Update()
@@ -107,8 +100,8 @@ public class PlayerController : MonoBehaviour
 
     void OnMouseClicked(Define.MouseEvent evt)
     {
-        if (_state == PlayerState.Die)
-            return; 
+        if(_state == PlayerState.Die)
+            return;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.red, 1.0f);
