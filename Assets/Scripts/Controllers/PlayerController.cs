@@ -51,11 +51,15 @@ public class PlayerController : MonoBehaviour
 
         // 애니메이션
         Animator anim = GetComponent<Animator>();
+        // 현재 게임 상태에 대한 정보를 넘겨준다
+        anim.SetFloat("speed", _speed); 
     }
 
     void UpdateIdle()
     {
         Animator anim = GetComponent<Animator>();
+
+        anim.SetFloat("speed", 0); 
     }
 
     void Update()
