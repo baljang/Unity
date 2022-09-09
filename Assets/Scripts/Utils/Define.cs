@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class Define
 {
- // 마우스 이벤트 종류
+    public enum UIEvent
+    {
+        Click, 
+        Drag,
+    }
+
     public enum MouseEvent
     {
        Press, 
