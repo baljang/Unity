@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UI_Button : UI_Base
@@ -24,13 +25,23 @@ public class UI_Button : UI_Base
         TestObject,
     }
 
+    enum Images
+    {
+        ItemIcon,
+    }
+
     private void Start()
     {
         Bind<Button>(typeof(Buttons)); 
         Bind<TMP_Text>(typeof(Texts));
         Bind<GameObject>(typeof(GameObjects)); 
+        Bind<Image>(typeof(Images));
 
-        GetText((int)Texts.ScoreText).text = "Bind Test"; 
+        GetText((int)Texts.ScoreText).text = "Bind Test";
+
+        GameObject go = GetImage((int)Images.ItemIcon).gameObject;
+        UI_EventHandler evt = go.GetComponent<UI_EventHandler>();
+        evt.OnDragHandler += ((PointerEventData data) => { evt.gameObject.transform.position = data.position; }); 
     }
 
 
