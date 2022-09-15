@@ -18,7 +18,12 @@ public class ResourceManager
             return null;
         }
 
-        return Object.Instantiate(prefab, parent);  // Instantiate를 재귀적으로 호출 할 수 있으니 Object의 Instantiate를 호출하라고 명시를 해준 것
+        GameObject go = Object.Instantiate(prefab, parent);
+        int index = go.name.IndexOf("(Clone)");
+        if (index > 0)
+            go.name = go.name.Substring(0, index); 
+
+        return go;  
     }
 
     public void Destroy(GameObject go)  // 나중에 필요하면 시간도 넣는 거 만들어 주면 된다. 
