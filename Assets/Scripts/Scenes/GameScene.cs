@@ -4,7 +4,22 @@ using UnityEngine;
 
 public class GameScene : BaseScene
 {
+    class Test
+    {
+        public int Id = 0; 
+    }
 
+    class CoroutineTest : IEnumerable
+    {
+        public IEnumerator GetEnumerator()
+        {
+            for(int i = 0; i < 1000000; i++)
+            {
+                if (i % 10000 == 0)
+                    yield return null; 
+            }
+        }
+    }
 
     protected override void Init()
     {
@@ -14,11 +29,15 @@ public class GameScene : BaseScene
 
         Managers.UI.ShowSceneUI<UI_Inven>();
 
-
-        for (int i = 0; i < 5; i++)
-            Managers.Resource.Instantiate("Player");
+        CoroutineTest test = new CoroutineTest();
+        foreach (System.Object t in test)
+        {
+            Test value = (Test)t;
+            Debug.Log(value.Id); 
+        }
     }
 
+  
     public override void Clear()
     {
 
