@@ -7923,6 +7923,11 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4882187881659489650, guid: ca153cad2c0f1e94889e74753b86cf45,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7369841426972910221, guid: ca153cad2c0f1e94889e74753b86cf45,
         type: 3}
       propertyPath: m_RootOrder
