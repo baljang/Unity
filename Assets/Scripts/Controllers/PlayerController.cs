@@ -3,66 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerController : MonoBehaviour
-{    public enum PlayerState
-    {
-        Die,
-        Moving,
-        Idle,
-        Skill,
-    }
-
+public class PlayerController : BaseController
+{    
     int _mask = (1 << (int)Define.Layer.Ground) | (1 << (int)Define.Layer.Monster);
 
     PlayerStat _stat;
-    Vector3 _destPos;
+    bool _stopSkill = false;
 
-    [SerializeField]
-    PlayerState _state = PlayerState.Idle;
-
-    GameObject _lockTarget;
-
-    public PlayerState State
-    {
-        get { return _state; }
-        set
-        {
-            _state = value;
-
-            Animator anim = GetComponent<Animator>();
-            switch (_state)
-            {
-                case PlayerState.Die:
-                    break;
-                case PlayerState.Idle:
-                    anim.CrossFade("WAIT", 0.1f); 
-                    break;
-                case PlayerState.Moving:
-                    anim.CrossFade("RUN", 0.1f);
-                    break;
-                case PlayerState.Skill:
-                    anim.CrossFade("ATTACK", 0.1f, -1, 0);
-                    break;
-            }
-        }
-    }
-
-    void Start()
+    public override void Init()
     {   
         _stat = gameObject.GetComponent<PlayerStat>();
-
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
 
-        Managers.UI.MakeWorldSpaceUI<UI_HPBar>(transform); 
+        if (gameObject.GetComponentInChildren<UI_HPBar>() == null)
+            Managers.UI.MakeWorldSpaceUI<UI_HPBar>(transform); 
     }
 
-    void UpdateDie()
-    {
-        // 아무것도 안함
-    }
-
-    void UpdateMoving()
+    protected override void UpdateMoving()
     {
         // 몬스터가 내 사정거리보다 가까우면 공격
         if(_lockTarget != null)
@@ -70,7 +28,7 @@ public class PlayerController : MonoBehaviour
             float distance = (_destPos - transform.position).magnitude;
             if(distance <= 1.5)
             {
-                State = PlayerState.Skill;
+                State = Define.State.Skill;
                 return; 
             }
         }
@@ -79,7 +37,7 @@ public class PlayerController : MonoBehaviour
         Vector3 dir = _destPos - transform.position;
         if (dir.magnitude < 1f)
         {
-            State = PlayerState.Idle;
+            State = Define.State.Idle;
         }
         else
         {
@@ -92,7 +50,7 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(transform.position+ Vector3.up * 0.5f, dir, 1.0f, LayerMask.GetMask("Block")))
             {
                 if(Input.GetMouseButton(0)==false)
-                    State = PlayerState.Idle; 
+                    State = Define.State.Idle; 
                 return;
             }
 
@@ -102,12 +60,7 @@ public class PlayerController : MonoBehaviour
         }     
     }
 
-    void UpdateIdle()
-    {
-
-    }
-
-    void UpdateSkill()
+    protected override void UpdateSkill()
     {
         if(_lockTarget != null)
         {
@@ -131,73 +84,26 @@ public class PlayerController : MonoBehaviour
 
         if(_stopSkill)
         {
-            State = PlayerState.Idle;
+            State = Define.State.Idle;
         }
         else
         {
-            State = PlayerState.Skill; 
+            State = Define.State.Skill; 
         }
     }
-
-
-    void Update()
-    {
-        switch(State)
-        {
-            case PlayerState.Die:
-                UpdateDie();
-                break;
-            case PlayerState.Moving:
-                UpdateMoving();
-                break;
-            case PlayerState.Idle:
-                UpdateIdle();
-                break;
-            case PlayerState.Skill:
-                UpdateSkill();
-                break; 
-        }
-    }
-
-    //void OnKeyboard()
-    //{
-    //    if (Input.GetKey(KeyCode.W))
-    //    {
-    //        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.forward), 0.2f);
-    //        transform.position += Vector3.forward * Time.deltaTime * _speed;
-    //    }
-    //    if (Input.GetKey(KeyCode.S))
-    //    {
-    //        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.back), 0.2f);
-    //        transform.position += Vector3.back * Time.deltaTime * _speed;
-    //    }
-    //    if (Input.GetKey(KeyCode.A))
-    //    {
-    //        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.left), 0.2f);
-    //        transform.position += Vector3.left * Time.deltaTime * _speed;
-    //    }
-    //    if (Input.GetKey(KeyCode.D))
-    //    {
-    //        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.right), 0.2f);
-    //        transform.position += Vector3.right * Time.deltaTime * _speed;
-    //    }
-    //}
-
-
-    bool _stopSkill = false; 
 
     void OnMouseEvent(Define.MouseEvent evt)
     {
         switch(State)
         {
-            case PlayerState.Idle:
+            case Define.State.Idle:
                 OnMouseEvent_IdleRun(evt); 
                 break;
 
-            case PlayerState.Moving:
+            case Define.State.Moving:
                 OnMouseEvent_IdleRun(evt); 
                 break;
-            case PlayerState.Skill:
+            case Define.State.Skill:
                 {
                     if (evt == Define.MouseEvent.PointerUp)
                         _stopSkill = true; 
@@ -220,7 +126,7 @@ public class PlayerController : MonoBehaviour
                     if (raycastHit)
                     {
                         _destPos = hit.point;
-                        State = PlayerState.Moving;
+                        State = Define.State.Moving;
                         _stopSkill = false; 
 
                         if (hit.collider.gameObject.layer == (int)Define.Layer.Monster)
@@ -243,3 +149,26 @@ public class PlayerController : MonoBehaviour
     }
 }
 
+//void OnKeyboard()
+//{
+//    if (Input.GetKey(KeyCode.W))
+//    {
+//        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.forward), 0.2f);
+//        transform.position += Vector3.forward * Time.deltaTime * _speed;
+//    }
+//    if (Input.GetKey(KeyCode.S))
+//    {
+//        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.back), 0.2f);
+//        transform.position += Vector3.back * Time.deltaTime * _speed;
+//    }
+//    if (Input.GetKey(KeyCode.A))
+//    {
+//        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.left), 0.2f);
+//        transform.position += Vector3.left * Time.deltaTime * _speed;
+//    }
+//    if (Input.GetKey(KeyCode.D))
+//    {
+//        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.right), 0.2f);
+//        transform.position += Vector3.right * Time.deltaTime * _speed;
+//    }
+//}
