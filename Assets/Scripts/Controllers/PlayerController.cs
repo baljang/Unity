@@ -11,7 +11,8 @@ public class PlayerController : BaseController
     bool _stopSkill = false;
 
     public override void Init()
-    {   
+    {
+        WoldObjectType = Define.WorldObject.Player;
         _stat = gameObject.GetComponent<PlayerStat>();
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Input.MouseAction += OnMouseEvent;
